@@ -1,7 +1,6 @@
 const { developmentChains, VERIFICATION_BLOCK_CONFIRMATIONS } = require("../helper-hardhat-config")
 
-const { network, ethers } = require("hardhat")
-const { verify } = require("../helper-functions")
+const { network } = require("hardhat")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
@@ -12,10 +11,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         : VERIFICATION_BLOCK_CONFIRMATIONS
 
     log("----------------------------------------------------")
-    const arguments = []
+
     const box = await deploy("Box", {
         from: deployer,
-        args: arguments,
+        args: [],
         log: true,
         waitConfirmations: waitBlockConfirmations,
         proxy: {
@@ -33,8 +32,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
-        const boxAddress = (await ethers.getContract("Box_Implementation")).address;
-        await verify(boxAddress, arguments)
+        await verify(box.address, [])
     }
     log("----------------------------------------------------")
 }

@@ -1,6 +1,5 @@
 const { developmentChains, VERIFICATION_BLOCK_CONFIRMATIONS } = require("../helper-hardhat-config")
 const { network, deployments, deployer } = require("hardhat")
-const { verify } = require("../helper-functions")
 
 async function main() {
     const { deploy, log } = deployments
@@ -12,10 +11,9 @@ async function main() {
 
     log("----------------------------------------------------")
 
-    const arguments = []
     const boxV2 = await deploy("BoxV2", {
         from: deployer,
-        args: arguments,
+        args: [],
         log: true,
         waitConfirmations: waitBlockConfirmations,
     })

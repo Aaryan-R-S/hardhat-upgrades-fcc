@@ -11,17 +11,15 @@ require("@openzeppelin/hardhat-upgrades")
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-const RINKEBY_RPC_URL =
-    process.env.RINKEBY_RPC_URL || "https://eth-rinkeby.alchemyapi.io/v2/your-api-key"
-const KOVAN_RPC_URL = process.env.KOVAN_RPC_URL || "https://eth-kovan.alchemyapi.io/v2/your-api-key"
-const POLYGON_MUMBAI_RPC_URL =
-    process.env.POLYGON_MUMBAI_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
-const POLYGON_MAINNET_RPC_URL =
-    process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
 const MAINNET_RPC_URL =
     process.env.MAINNET_RPC_URL ||
     process.env.ALCHEMY_MAINNET_RPC_URL ||
     "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
+const RINKEBY_RPC_URL =
+    process.env.RINKEBY_RPC_URL || "https://eth-rinkeby.alchemyapi.io/v2/your-api-key"
+const KOVAN_RPC_URL = process.env.KOVAN_RPC_URL || "https://eth-kovan.alchemyapi.io/v2/your-api-key"
+const POLYGON_MAINNET_RPC_URL =
+    process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 // optional
 const MNEMONIC = process.env.MNEMONIC || "your mnemonic"
@@ -29,7 +27,6 @@ const MNEMONIC = process.env.MNEMONIC || "your mnemonic"
 // Your API key for Etherscan, obtain one at https://etherscan.io/
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "Your polygonscan API key"
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "Your coinmarket cap API key"
 const REPORT_GAS = process.env.REPORT_GAS || false
 
 module.exports = {
@@ -45,23 +42,32 @@ module.exports = {
         localhost: {
             chainId: 31337,
         },
-        rinkeby: {
-            url: RINKEBY_RPC_URL,
-            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            saveDeployments: true,
-            chainId: 4,
-        },
         kovan: {
             url: KOVAN_RPC_URL,
             accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+            //accounts: {
+            //     mnemonic: MNEMONIC,
+            // },
             saveDeployments: true,
             chainId: 42,
         },
-        polygonMumbai: {
-            url: POLYGON_MUMBAI_RPC_URL,
+        rinkeby: {
+            url: RINKEBY_RPC_URL,
             accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+            //   accounts: {
+            //     mnemonic: MNEMONIC,
+            //   },
             saveDeployments: true,
-            chainId: 80001,
+            chainId: 4,
+        },
+        mainnet: {
+            url: MAINNET_RPC_URL,
+            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+            //   accounts: {
+            //     mnemonic: MNEMONIC,
+            //   },
+            saveDeployments: true,
+            chainId: 1,
         },
         polygon: {
             url: POLYGON_MAINNET_RPC_URL,
@@ -69,19 +75,13 @@ module.exports = {
             saveDeployments: true,
             chainId: 137,
         },
-        mainnet: {
-            url: MAINNET_RPC_URL,
-            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            saveDeployments: true,
-            chainId: 1,
-        },
     },
     etherscan: {
         // npx hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
         apiKey: {
             rinkeby: ETHERSCAN_API_KEY,
             kovan: ETHERSCAN_API_KEY,
-            polygonMumbai: POLYGONSCAN_API_KEY,
+            polygon: POLYGONSCAN_API_KEY,
         },
     },
     gasReporter: {
@@ -89,7 +89,11 @@ module.exports = {
         currency: "USD",
         outputFile: "gas-report.txt",
         noColors: true,
-        coinmarketcap: COINMARKETCAP_API_KEY,
+        // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    },
+    contractSizer: {
+        runOnCompile: false,
+        only: ["Raffle"],
     },
     namedAccounts: {
         deployer: {
@@ -106,7 +110,7 @@ module.exports = {
                 version: "0.8.8",
             },
             {
-                version: "0.7.6",
+                version: "0.4.24",
             },
         ],
     },
